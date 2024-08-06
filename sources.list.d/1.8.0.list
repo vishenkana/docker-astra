@@ -1,0 +1,2 @@
+deb http://repo/os/astra/1.8/main/ 1.8_x86-64 main contrib non-free non-free-firmware
+deb http://repo/os/astra/1.8/dev/ 1.8_x86-64 main contrib non-free non-free-firmware

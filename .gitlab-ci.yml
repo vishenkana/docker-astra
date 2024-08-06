@@ -1,0 +1,39 @@
+stages:
+  - build
+  - deploy
+
+######################### build ################################################
+.build_container: &build_container
+  - apt-get update && apt-get install -y debootstrap dpkg-dev tar
+  - bash debootstrap.sh $VERSION $CODENAME $LICENSE
+
+voronezh_1_8_0:
+  stage: build
+  image:
+    name: debian:12
+  tags:
+    - docker
+  script:
+    - export VERSION=1.8.0
+    - export CODENAME=1.8_x86-64
+    - export LICENSE=voronezh
+    - *build_container
+  artifacts:
+    paths:
+      - build
+
+######################### push #################################################
+.push_container: &push_container
+  - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+  - docker load -i build/$TAG.tar.gz
+  - docker image tag ccr/demo/astra:$TAG $CI_REGISTRY/$CI_PROJECT_PATH:$TAG
+  - docker push $CI_REGISTRY/$CI_PROJECT_PATH:$TAG
+
+voronezh_1_8_0:push:
+  stage: deploy
+  tags:
+    - shell
+  script:
+    - export TAG=1.8.0-voronezh
+    - *push_container
+  needs: ["voronezh_1_8_0"]

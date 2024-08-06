@@ -1,0 +1,13 @@
+BASE_URL="http://repo/os/astra/1.8/main/"
+
+PACKAGES_TO_PURGE="
+libfile-find-rule-perl
+libgdbm-compat4
+libgdbm6
+libnumber-compare-perl
+libperl5.36
+libtext-glob-perl
+lsb-base
+perl
+perl-modules-5.36
+"
